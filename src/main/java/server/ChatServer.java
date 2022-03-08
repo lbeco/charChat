@@ -1,3 +1,5 @@
+package server;
+
 import config.Config;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -9,15 +11,20 @@ import io.netty.handler.codec.http2.Http2FrameCodec;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import protocol.MessageCodec;
+import protocol.ProtocolFrameDecoder;
+import server.handler.LoginRequestMessageHandler;
 
 import java.util.List;
 
 @Slf4j
-public class CharServer {
+public class ChatServer {
 
     public static void main(String[] args) {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
+        LoginRequestMessageHandler LOGIN_HANDLER = new LoginRequestMessageHandler();
+
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
@@ -26,13 +33,15 @@ public class CharServer {
 
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(new ProtocolFrameDecoder());
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                    ch.pipeline().addLast(new HttpServerCodec());
+                    ch.pipeline().addLast(new MessageCodec());
+                    ch.pipeline().addLast(LOGIN_HANDLER);
 
                 }
             });
-            ChannelFuture channelFuture = serverBootstrap.bind(Config.PORT).sync();
-            channelFuture.channel().closeFuture().sync();
+            Channel channel = serverBootstrap.bind(Config.PORT).sync().channel();
+            channel.closeFuture().sync();
 
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -26,6 +26,7 @@ public abstract class Message  {
 
     static {
         messageClasses.put(LoginRequestMessage, LoginRequestMessage.class);
+        messageClasses.put(LoginResponseMessage, LoginResponseMessage.class);
     }
 
 

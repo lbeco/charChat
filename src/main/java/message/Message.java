@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public abstract class Message  {
+public abstract class Message implements Serializable {
 
     private static final Map<Integer, Class<? extends Message>> messageClasses = new HashMap<>();
 

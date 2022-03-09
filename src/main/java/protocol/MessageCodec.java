@@ -30,6 +30,7 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         byte[] bytes = SerializerUtil.encode(msg);
         out.writeInt(bytes.length);             // 长度
         out.writeBytes(bytes);
+        outList.add(out);
 
     }
 

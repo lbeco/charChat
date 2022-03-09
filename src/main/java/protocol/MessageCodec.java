@@ -27,6 +27,12 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         out.writeByte(0xff);
         out.writeByte(0xff);
 
+//        out.writeInt(1);
+//        out.writeInt(1);
+//        out.writeInt(1);
+//        out.writeInt(1);
+
+        // 6. 获取内容的字节数组
         byte[] bytes = SerializerUtil.encode(msg);
         out.writeInt(bytes.length);             // 长度
         out.writeBytes(bytes);
@@ -43,7 +49,11 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
         int time = in.readInt();
         int sequenceId = in.readInt();
         in.readByte();
-        in.readByte();
+
+//        in.readInt();
+//        in.readInt();
+//        in.readInt();
+//        in.readInt();
 
         int length = in.readInt();
         byte[] bytes = new byte[length];
@@ -51,7 +61,8 @@ public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
 
         Class<? extends Message> messageClass = Message.getMessageClass(messageType);
         Message message = SerializerUtil.decode(messageClass,bytes);
+//        log.debug("{}, {}, {}, {}, {}, {}", magicNum, version, serializerType, messageType, sequenceId, length);
+//        log.debug("{}", message);
         out.add(message);
-
     }
 }

@@ -24,9 +24,14 @@ public abstract class Message implements Serializable {
     public static final int LoginRequestMessage = 0;
     public static final int LoginResponseMessage = 1;
 
+    public static final int ChatRequestMessage = 2;
+    public static final int ChatResponseMessage = 3;
+
     static {
         messageClasses.put(LoginRequestMessage, LoginRequestMessage.class);
         messageClasses.put(LoginResponseMessage, LoginResponseMessage.class);
+        messageClasses.put(ChatRequestMessage, ChatRequestMessage.class);
+        messageClasses.put(ChatResponseMessage, ChatResponseMessage.class);
     }
 
 

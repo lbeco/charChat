@@ -5,14 +5,15 @@ import lombok.ToString;
 
 @Data
 @ToString(callSuper = true)
-public class LoginResponseMessage extends Message {
+public class ChatResponseMessage extends Message{
+
     private Boolean result;
     private String message;
 
-    public LoginResponseMessage() {
+    public ChatResponseMessage() {
     }
 
-    public LoginResponseMessage(boolean result, String message) {
+    public ChatResponseMessage(boolean result, String message) {
         this.result =result;
         this.message = message;
     }
@@ -23,8 +24,6 @@ public class LoginResponseMessage extends Message {
 
     @Override
     public int getMessageType() {
-        return LoginResponseMessage;
+        return ChatResponseMessage;
     }
-
-
 }

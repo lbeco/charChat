@@ -11,6 +11,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
+import message.ChatRequestMessage;
+import message.ChatResponseMessage;
 import message.LoginRequestMessage;
 import message.LoginResponseMessage;
 import protocol.MessageCodec;
@@ -56,6 +58,16 @@ public class ChatClient {
                                 // 唤醒 system in 线程
                                 WAIT_FOR_LOGIN.countDown();
                             }
+                            else if ((msg instanceof ChatRequestMessage)) {
+                                ChatRequestMessage crm = (ChatRequestMessage) msg;
+                                System.out.println(crm.getFrom() + " " + crm.getMsg());
+                            }
+                            else if ((msg instanceof ChatResponseMessage)) {
+                                ChatResponseMessage crm = (ChatResponseMessage) msg;
+                                if(!crm.getResult()){
+                                    System.out.println("Request failed! "+crm.getMessage());
+                                }
+                            }
                         }
 
                         @Override
@@ -80,8 +92,29 @@ public class ChatClient {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
+                                if (!LOGIN.get()) {
+                                    ctx.channel().close();
+                                    return;
+                                }
 
-                            },"system in").start();
+                                while (true) {
+                                    String command;
+                                    try {
+                                        command = scanner.nextLine();
+                                    } catch (Exception e) {
+                                        break;
+                                    }
+                                    String[] s = command.split(" ");
+
+                                    switch(s[0]){
+                                        case "send":
+                                            ctx.writeAndFlush(new ChatRequestMessage(username,s[1],s[2]));
+                                    }
+
+                                }
+
+
+                            }, "system in").start();
                         }
 
                         // 在连接断开时触发

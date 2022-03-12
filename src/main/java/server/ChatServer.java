@@ -13,6 +13,7 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 import protocol.MessageCodec;
 import protocol.ProtocolFrameDecoder;
+import server.handler.ChatRequestHandler;
 import server.handler.LoginRequestMessageHandler;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class ChatServer {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
         LoginRequestMessageHandler LOGIN_HANDLER = new LoginRequestMessageHandler();
+        ChatRequestHandler CHAT_HANDLER = new ChatRequestHandler();
 
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -37,6 +39,7 @@ public class ChatServer {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new MessageCodec());
                     ch.pipeline().addLast(LOGIN_HANDLER);
+                    ch.pipeline().addLast(CHAT_HANDLER);
 
                 }
             });

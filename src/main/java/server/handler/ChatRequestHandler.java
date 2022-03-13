@@ -1,13 +1,17 @@
 package server.handler;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 import message.ChatRequestMessage;
 import message.ChatResponseMessage;
 import message.LoginRequestMessage;
 import server.service.SessionFactory;
 
+@Slf4j
+@ChannelHandler.Sharable
 public class ChatRequestHandler extends SimpleChannelInboundHandler<ChatRequestMessage> {
 
     @Override

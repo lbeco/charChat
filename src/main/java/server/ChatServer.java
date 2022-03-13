@@ -15,6 +15,7 @@ import protocol.MessageCodec;
 import protocol.ProtocolFrameDecoder;
 import server.handler.ChatRequestHandler;
 import server.handler.LoginRequestMessageHandler;
+import server.handler.QuitHandler;
 
 import java.util.List;
 
@@ -24,8 +25,10 @@ public class ChatServer {
     public static void main(String[] args) {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
+        LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
         LoginRequestMessageHandler LOGIN_HANDLER = new LoginRequestMessageHandler();
         ChatRequestHandler CHAT_HANDLER = new ChatRequestHandler();
+        QuitHandler QUIT_HANDLER = new QuitHandler();
 
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -36,10 +39,11 @@ public class ChatServer {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new ProtocolFrameDecoder());
-                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
+                    ch.pipeline().addLast(loggingHandler);
                     ch.pipeline().addLast(new MessageCodec());
                     ch.pipeline().addLast(LOGIN_HANDLER);
                     ch.pipeline().addLast(CHAT_HANDLER);
+                    ch.pipeline().addLast(QUIT_HANDLER);
 
                 }
             });

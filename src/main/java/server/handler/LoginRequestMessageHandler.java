@@ -3,11 +3,13 @@ package server.handler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 import message.LoginRequestMessage;
 import message.LoginResponseMessage;
 import server.service.SessionFactory;
 import server.service.UserServiceFactory;
 
+@Slf4j
 @ChannelHandler.Sharable
 public class LoginRequestMessageHandler extends SimpleChannelInboundHandler<LoginRequestMessage> {
     @Override

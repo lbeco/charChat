@@ -54,9 +54,13 @@ public class ChatClient {
                                     // 如果登录成功
                                     LOGIN.set(true);
                                     System.out.println("登录成功");
+
+                                }else{
+                                    System.out.println("登录失败");
                                 }
                                 // 唤醒 system in 线程
                                 WAIT_FOR_LOGIN.countDown();
+
                             }
                             else if ((msg instanceof ChatRequestMessage)) {
                                 ChatRequestMessage crm = (ChatRequestMessage) msg;
@@ -109,6 +113,13 @@ public class ChatClient {
                                     switch(s[0]){
                                         case "send":
                                             ctx.writeAndFlush(new ChatRequestMessage(username,s[1],s[2]));
+
+                                        case "quit":
+                                            System.out.println("退出连接");
+                                            ctx.channel().close();
+
+                                        default:
+                                            System.out.println("错误指令");
                                     }
 
                                 }

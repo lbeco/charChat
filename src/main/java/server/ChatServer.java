@@ -30,6 +30,8 @@ public class ChatServer {
         ChatRequestHandler CHAT_HANDLER = new ChatRequestHandler();
         QuitHandler QUIT_HANDLER = new QuitHandler();
 
+        System.out.println("Chat Server start!");
+
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
@@ -58,4 +60,5 @@ public class ChatServer {
             worker.shutdownGracefully();
         }
     }
+
 }
